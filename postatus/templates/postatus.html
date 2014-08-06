@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>Project: {{ project.name }}</h1>
+  <dl class="dl-horizontal">
+    <dt>url</dt>
+    <dd><a href="{{ project.url }}">{{ project.url }}</a></dd>
+
+    <dt>verbatim</dt>
+    <dd><a href="{{ project.verbatim_url }}">{{ project.verbatim_url }}</a></dd>
+
+    <dt>postatus url</dt>
+    <dd><a href="{{ project.postatus_url }}">{{ project.postatus_url }}</a></dd>
+
+    <dt>postatus datestamp</dt>
+    <dd>{{ datestamp }}</dd>
+  </dl>
+
+  {% if errors %}
+    <h2>Errors</h2>
+    {% for error in errors %}
+      <p class="bg-danger">{{ error }}</p>
+    {% endfor %}
+
+  {% else %}
+
+    <h2>String errors</h2>
+    {% if serrors %}
+      {% for serror in serrors %}
+        <div>
+          <h3>{{ serror.locale }} <small>{{ serror.fn }}</small></h3>
+          <pre>{{ serror.errors.decode('utf-8') }}</pre>
+          <p>
+            FIXME: list of existing bugs
+          </p>
+          <p>
+            <a href="{{ generate_bug_url(project, serror.locale, serror.errors) }}">Generate bug</a>
+          </p>
+        </div>
+      {% endfor %}
+    {% else %}
+      <p>
+         No errors!
+      </p>
+    {% endif  %}
+  {% endif %}
+{% endblock content %}

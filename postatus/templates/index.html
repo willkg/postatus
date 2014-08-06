@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>postatus checker</h1>
+  <p>
+    This is a system that parses the postatus file for issues,
+    displays the issues, and makes it easier to write up bugs for
+    those issues so they can get fix0rd.
+  </p>
+  <p>
+    Source code and issue tracker: <a href="https://github.com/willkg/postatus">github.com/willkg/postatus</a>
+  </p>
+
+  <h2>Projects</h2>
+  {% if projects %}
+    <ul>
+      {% for project in projects %}
+        <li><a href="{{ url_for('view_postatus', project=project) }}">{{ project }}</a></li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>
+      No projects defined.
+    </p>
+  {% endif %}
+  <p>
+    Don't see your project in this list? Does it generate a postatus file?
+    Then <a href="https://github.com/willkg/postatus">file an issue to have
+    it added</a>.
+  </p>
+{% endblock content %}

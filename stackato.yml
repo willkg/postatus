@@ -1,0 +1,8 @@
+name: postatus
+framework:
+   type: python
+   runtime: python27
+instances: 1
+mem: 128M
+processes:
+   web: $STACKATO_UWSGI --harakiri 60 wsgi.py

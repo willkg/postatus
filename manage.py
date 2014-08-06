@@ -4,7 +4,7 @@ import subprocess
 
 from flask.ext.script import Manager
 
-from postatus.wsgi import application
+from wsgi import application
 
 
 manager = Manager(application)

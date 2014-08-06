@@ -57,7 +57,7 @@ def index():
         projects=projects)
 
 
-StringError = namedtuple('StringError', ['locale', 'fn', 'errors'], verbose=True)
+StringError = namedtuple('StringError', ['locale', 'fn', 'errors'])
         
 
 def parse_postatus(url):

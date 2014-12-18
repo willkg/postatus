@@ -145,6 +145,9 @@ If you have any questions, please let us know.
 
 
 def generate_bug_url(project, locale, errortext):
+    if len(errortext) > 2000:
+        errortext = 'TOO MANY ERRORS: PLEASE COPY AND PASTE ERRORS HERE'
+
     context = {
         'url': project['url'],
         'product': project['name'],

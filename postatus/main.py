@@ -1,3 +1,4 @@
+import datetime
 import os
 import re
 from collections import namedtuple
@@ -125,7 +126,7 @@ def get_component_for_locale(locale):
     return L10N_COMPONENTS_CACHE[locale.replace('_', '-')]
 
 
-SUMMARY = "%(product)s: errors in strings"
+SUMMARY = "[%(locale)s] %(product)s: errors in strings: %(date)s"
 DESC = """\
 We found errors in the translated strings for %(product)s
 <%(url)s>. The errors are as follows:
@@ -154,6 +155,7 @@ def generate_bug_url(project, locale, errortext):
         'verbatim_locale_url': project['verbatim_locale_url'] % locale,
         'locale': locale,
         'errors': errortext,
+        'date': datetime.datetime.now().strftime('%Y-%m-%d'),
     }
 
     data = {

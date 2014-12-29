@@ -1,4 +1,5 @@
 import datetime
+import json
 import os
 import re
 from collections import namedtuple
@@ -111,7 +112,7 @@ def parse_postatus(url):
 L10N_COMPONENTS_CACHE = None
 
 
-def get_component_for_locale(locale):
+def get_l10n_components():
     global L10N_COMPONENTS_CACHE
     if not L10N_COMPONENTS_CACHE:
         resp = requests.get('https://bugzilla.mozilla.org/rest/product/Mozilla%20Localizations')
@@ -122,8 +123,11 @@ def get_component_for_locale(locale):
         L10N_COMPONENTS_CACHE = dict(
             [(comp.split(' ')[0], comp) for comp in comps]
         )
+    return L10N_COMPONENTS_CACHE
 
-    return L10N_COMPONENTS_CACHE[locale.replace('_', '-')]
+
+def get_component_for_locale(locale):
+    return get_l10n_components()[locale.replace('_', '-')]
 
 
 SUMMARY = "[%(locale)s] %(product)s: errors in strings: %(date)s"
@@ -194,4 +198,5 @@ def view_postatus(project):
         errors=errors,
         datestamp=datestamp,
         serrors=serrors,
-        generate_bug_url=generate_bug_url)
+        generate_bug_url=generate_bug_url,
+        l10n_components=json.dumps(get_l10n_components()))

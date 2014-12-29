@@ -1,70 +1,74 @@
 (function($, window) {
     'use strict';
 
-    var graphiteURL = 'https://graphite-phx1.mozilla.org/render/';
+    var BUGZILLA_URL = 'https://bugzilla.mozilla.org/rest/';
 
-    var graphiteOptions = {
-        'lg': {
-            height: '400',
-            width: '550',
-            from: '-12hour',
-            hideLegend: 'false'
-        },
-        'sm': {
-            height: '200',
-            width: '300',
-            from: '-12hour',
-            hideLegend: 'false'
-        }
-    };
+    // http://stackoverflow.com/a/1714899/205832
+    // From buggy.
+    function serializeObject(obj) {
+        var str = [];
+        var key;
 
-    function refreshGraphite() {
-        var items = $('.graphite');
-
-        $.each(items, function(index, value) {
-            var options = {};
-            var linesToShow = $(value).data('lines');
-            var optionsOverride = $(value).data('options') || {};
-            var lines = '';
-            var extra = null;
-
-            if ($(value).hasClass('graphite-lg')) {
-                $.extend(options, graphiteOptions.lg);
-            } else {
-                $.extend(options, graphiteOptions.sm);
+        for (key in obj) {
+            if (obj.hasOwnProperty(key)) {
+                var val = obj[key];
+                if (val instanceof Array) {
+                    $.each(val, function(index, part) {
+                        str.push(encodeURIComponent(key) + '=' + encodeURIComponent(part));
+                    });
+                } else {
+                    str.push(encodeURIComponent(key) + '=' + encodeURIComponent(val));
+                }
             }
-            $.extend(options, optionsOverride);
-            extra = $.param(options) + '&t=' + (new Date()).getTime();
+        }
+        return str.join("&");
+    }
 
-            $.each(linesToShow, function(index, line) {
-                lines = lines + 'target=' + line + '&';
-            });
+    function fetchBugs(params, callback) {
+        var url = BUGZILLA_URL + 'bug';
+        url += '?' + serializeObject(params);
 
-            var url = graphiteURL + '?' + lines + extra;
-            $(value).attr('src', url);
+        $.ajax({
+            url: url,
+            success: callback,
+            dataType: 'json'
         });
     }
 
-    var timeoutId = null;
+    var project = $('h1#project').data('name');
+    var l10nComponents = $('h1#project').data('components');
 
-    // Set up to refresh only when the tab is active
-    function runIntervals() {
-        if (window.blurred) {
-            return;
-        }
-        refreshGraphite();
+    $.each($('.locale'), function(index, value) {
+        var name = $(value).data('name');
+        var component = l10nComponents[name.replace('_', '-')];
+        var node = $(value).find('.buglist');
 
-        // Once a minute--run them again.
-        timeoutId = setTimeout(runIntervals, 60000);
-    }
+        var params = {
+            product: 'Mozilla Localizations',
+            component: component,
+            bug_status: ['UNCONFIRMED', 'NEW', 'ASSIGNED'],
+            short_desc_type: 'allwordssubstr',
+            short_desc: project + ': errors in strings'
+        };
 
-    window.onblur = function() {
-        if (timeoutId !== null) {
-            clearInterval(timeoutId);
-        }
-    };
-    window.onfocus = function() { runIntervals(); };
-
-    refreshGraphite();
+        fetchBugs(params, function(data, textStatus, jqXHR) {
+            console.log(data.bugs);
+            if (data.bugs.length > 0) {
+                node.append('<p>Existing bugs:</p>');
+                node.append('<ul></ul>');
+                node = $(node).find('ul');
+                $.each(data.bugs, function(index, bug) {
+                    console.log(bug);
+                    var id = bug.id;
+                    var summary = bug.summary;
+                    // FIXME: This is goofy.
+                    summary = summary.replace('<', '').replace('>', '');
+                    node.append('<li><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=' + id + '">' + id + ': ' + summary + '</a></li>');
+                });
+            } else {
+                node.append('<p>No existing bugs.</p>');
+            }
+        });
+    });
 
 }(jQuery, window));

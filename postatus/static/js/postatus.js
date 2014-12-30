@@ -24,6 +24,11 @@
         return str.join("&");
     }
 
+    function clean(text) {
+        text = String(text);
+        return text.replace('<', '').replace('>', '').replace('&', '');
+    }
+
     function fetchBugs(params, callback) {
         var url = BUGZILLA_URL + 'bug';
         url += '?' + serializeObject(params);
@@ -43,12 +48,18 @@
         var component = l10nComponents[name.replace('_', '-')];
         var node = $(value).find('.buglist');
 
+        // Get the bugs for this locale with the specified summary
+        // that changed in the last 14 days. This will pick up new
+        // bugs as well as bugs recently resolved.
         var params = {
             product: 'Mozilla Localizations',
             component: component,
-            bug_status: ['UNCONFIRMED', 'NEW', 'ASSIGNED'],
             short_desc_type: 'allwordssubstr',
-            short_desc: project + ': errors in strings'
+            short_desc: project + ': errors in strings',
+            f1: 'days_elapsed',
+            o1: 'lessthaneq',
+            v1: '14',
+            query_format: 'advanced'
         };
 
         fetchBugs(params, function(data, textStatus, jqXHR) {
@@ -58,12 +69,14 @@
                 node.append('<ul></ul>');
                 node = $(node).find('ul');
                 $.each(data.bugs, function(index, bug) {
-                    console.log(bug);
-                    var id = bug.id;
-                    var summary = bug.summary;
-                    // FIXME: This is goofy.
-                    summary = summary.replace('<', '').replace('>', '');
-                    node.append('<li><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=' + id + '">' + id + ': ' + summary + '</a></li>');
+                    node.append('<li>' +
+                                '<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=' + clean(bug.id) + '">' +
+                                clean(bug.id) + ': ' +
+                                clean(bug.summary) + '</a> :: ' +
+                                clean(bug.status) + '/' +
+                                clean(bug.resolution) + ' :: ' +
+                                clean(bug.last_change_time) +
+                                '</li>');
                 });
             } else {
                 node.append('<p>No existing bugs.</p>');

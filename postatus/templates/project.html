@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div id="main-content">
+    <dl class="dl-horizontal pull-right">
+      <dt>url</dt>
+      <dd><a href="{{ project.url }}">{{ project.url }}</a></dd>
+
+      <dt>verbatim</dt>
+      <dd><a href="{{ project.verbatim_url }}">{{ project.verbatim_url }}</a></dd>
+
+      <dt>postatus url</dt>
+      <dd><a href="{{ project.postatus_url }}">{{ project.postatus_url }}</a></dd>
+
+      <dt>l10n_status url</dt>
+      <dd><a href="{{ project.l10n_completion_url }}">{{ project.l10n_completion_url }}</a></dd>
+    </dl>
+
+    <h1 id="project" data-name="{{ project.name }}" data-components="{{ l10n_components }}">Project: {{ project.name }}</h1>
+
+
+    <ul class="nav nav-tabs">
+      <li role="presentation"{% if tab == 'project' %} class="active"{% endif %}><a href="{{ url_for('view_project', project=project.name) }}">project</a></li>
+      <li role="presentation"{% if tab == 'postatus' %} class="active"{% endif %}><a href="{{ url_for('view_postatus', project=project.name) }}">lint errors</a></li>
+      <li role="presentation"{% if tab == 'l10n_summary' %} class="active"{% endif %}><a href="{{ url_for('view_l10n_summary', project=project.name) }}">l10n summary</a></li>
+      <li role="presentation"{% if tab == 'l10n_history' %} class="active"{% endif %}><a href="{{ url_for('view_l10n_history', project=project.name) }}">l10n history</a></li>
+    </ul>
+
+    {% block innercontent %}
+      <div class="jumbotron">
+        <h1>{{ project.name }}
+          <small>{{ catchy }}</small>
+        </h1>
+        <p>
+          You know it!
+        </p>
+      </div>
+    {% endblock %}
+
+  </div>
+
+{% endblock content %}

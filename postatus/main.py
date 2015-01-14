@@ -1,6 +1,7 @@
 import datetime
 import json
 import os
+import random
 import re
 from collections import namedtuple
 from urllib import urlencode
@@ -15,6 +16,7 @@ from flask import (
 )
 import requests
 
+from postatus import status
 
 app = Flask(__name__)
 app.config.from_object('config')
@@ -48,6 +50,18 @@ def internal_server_error(message=None):
 app.register_error_handler(404, not_found)
 app.register_error_handler(500, internal_server_error)
 
+
+@app.context_processor
+def catchy_thing():
+    return dict(catchy=random.choice([
+        'is awesome!',
+        'is sweeter than honey!',
+        'makes my mouth water!',
+        'is the cat\'s pajamas!',
+        'is a very mysterious and powerful site and it\'s mystery is only '
+        'exceeded by it\'s power.',
+        'is a banana stand.',
+    ]))
 
 
 @app.route('/')
@@ -176,10 +190,21 @@ def generate_bug_url(project, locale, errortext):
 
 
 @app.route('/p/<project>')
+def view_project(project):
+    projdata = app.config.get('PROJECTS', {}).get(project, {})
+
+    return render_template(
+        'project.html',
+        tab='project',
+        project=projdata
+    )
+
+
+@app.route('/p/<project>/postatus')
 def view_postatus(project):
     projdata = app.config.get('PROJECTS', {}).get(project, {})
 
-    datestamp = ''
+    postatus_datestamp = ''
     errors = []
     serrors = []
 
@@ -190,13 +215,68 @@ def view_postatus(project):
         errors.append('Project has no postatus_url configured.')
 
     else:
-        datestamp, serrors = parse_postatus(projdata['postatus_url'])
+        postatus_datestamp, serrors = parse_postatus(projdata['postatus_url'])
 
     return render_template(
         'postatus.html',
+        tab='postatus',
         project=projdata,
         errors=errors,
-        datestamp=datestamp,
+        postatus_datestamp=postatus_datestamp,
         serrors=serrors,
         generate_bug_url=generate_bug_url,
         l10n_components=json.dumps(get_l10n_components()))
+
+
+@app.route('/p/<project>/l10n_summary')
+def view_l10n_summary(project):
+    projdata = app.config.get('PROJECTS', {}).get(project, {})
+
+    l10n_status = None
+    errors = []
+
+    if not projdata:
+        errors.append('Project "%s" does not exist.' % project)
+
+    if 'l10n_completion_url' not in projdata:
+        errors.append('Project has no l10n_completion_url configured.')
+
+    else:
+        l10n_status = status.Status(projdata['l10n_completion_url'])
+        l10n_status.get_data()
+
+    return render_template(
+        'l10n_summary.html',
+        tab='l10n_summary',
+        created=l10n_status.created,
+        project=projdata,
+        errors=errors,
+        l10n_status=l10n_status
+    )
+
+
+@app.route('/p/<project>/l10n_history')
+def view_l10n_history(project):
+    projdata = app.config.get('PROJECTS', {}).get(project, {})
+
+    l10n_status = None
+    errors = []
+
+    if not projdata:
+        errors.append('Project "%s" does not exist.' % project)
+
+    if 'l10n_completion_url' not in projdata:
+        errors.append('Project has no l10n_completion_url configured.')
+
+    else:
+        l10n_status = status.Status(projdata['l10n_completion_url'])
+        l10n_status.get_data()
+
+    return render_template(
+        'l10n_history.html',
+        tab='l10n_history',
+        created=l10n_status.created,
+        project=projdata,
+        errors=errors,
+        l10n_status=l10n_status
+    )

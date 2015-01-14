@@ -1,0 +1,71 @@
+{% extends "project.html" %}
+
+{% block innercontent %}
+  <h2>L10N History
+    <small>{{ created }}</small>
+  </h2>
+
+  <div class="row">
+    <div class="col-md-8">
+      {% if errors %}
+        <h2>Errors</h2>
+        {% for error in errors %}
+          <p class="bg-danger">{{ error }}</p>
+        {% endfor %}
+      {% else %}
+
+        {% if l10n_status %}
+          {% set history = l10n_status.history() %}
+          <div>
+            {% if history.highlighted %}
+            {% endif %}
+
+            {% if history.locales %}
+              <h3>Locales</h3>
+              <table class="l10n-history table table-condensed table-hover">
+                <tr>
+                  <th>&nbsp;</th>
+                  {% for date in history.headers %}
+                    <th>{{ date }}</th>
+                  {% endfor %}
+                </tr>
+                {% for loc_item in history.locales %}
+                  <tr>
+                    <th>{{ loc_item[0] }}</th>
+                    {% for data_point in loc_item[1] %}
+                      <td class="history-{{ data_point[0] }}">{{ data_point[1] }}</td>
+                    {% endfor %}
+                  <tr>
+                {% endfor %}
+              </table>
+            {% endif %}
+          </div>
+        {% endif %}
+      {% endif %}
+    </div>
+
+    <div class="col-md-4">
+      <div class="well well-lg">
+        <p>
+          Every time we deploy we run some stats on translations and
+          throw them in a JSON file. We keep history of those stats
+          over time. This page shows the history of translated string
+          state across locales as of the last deploy along with
+          up/down adjustments.
+        </p>
+        <p>
+          Note: Days with a lot of red tend to involve a lot of new
+          strings.
+        </p>
+        <p>
+          FIXME: Allow narrowing down to looking at specific "apps"
+          and "highlight" specific locales.
+        </p>
+        <p>
+          FIXME: Allow sorting by locale name (alphabetical) and
+          by percentage for a specific day.
+        </p>
+      </div>
+    </div>
+  </div>
+{% endblock innercontent %}

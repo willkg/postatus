@@ -1,0 +1,91 @@
+{% extends "project.html" %}
+
+{% block innercontent %}
+  <h2>L10N Summary
+    <small>{{ created }}</small>
+  </h2>
+
+  <div class="row">
+    <div class="col-md-8">
+      {% if errors %}
+        <h2>Errors</h2>
+        {% for error in errors %}
+          <p class="bg-danger">{{ error }}</p>
+        {% endfor %}
+      {% else %}
+
+        {% if l10n_status %}
+          {% set summary = l10n_status.summary() %}
+          <div>
+            {% if summary.highlighted %}
+              <h3>Highlighted locales</h3>
+              <table class="l10n-summary">
+                {% for item in summary.highlighted %}
+                  <tr>
+                    <td>{{ item[0] }}</td>
+                    {% set val = (item[1] / 5).__int__() %}
+                    <td>
+                      <span class="perc perc-{% if val == 20 %}good{% elif val > 15 %}ok{% else %}bad{% endif %}">
+                        {% for chunk in range(val) %}
+                          <span class="perc-notch">=</span>
+                        {% endfor %}
+                      </span>
+                      <span class="perc-value">
+                        {{ item[1] }}
+                      </span>
+                    </td>
+                  </tr>
+                {% endfor %}
+              </table>
+            {% endif %}
+      
+            {% if summary.locales %}
+              <h3>Locales</h3>
+              <table class="l10n-summary">
+                {% for item in summary.locales %}
+                  <tr>
+                    <td>{{ item[0] }}</td>
+                    {% set val = (item[1] / 5).__int__() %}
+                    <td>
+                      <span class="perc perc-{% if val == 20 %}good{% elif val > 15 %}ok{% else %}bad{% endif %}">
+                        {% for chunk in range(val) %}
+                          <span class="perc-notch">=</span>
+                        {% endfor %}
+                      </span>
+                      <span class="perc-value">
+                        {{ item[1] }}
+                      </span>
+                    </td>
+                  </tr>
+                {% endfor %}
+              </table>
+            {% endif %}
+          </div>
+        {% endif %}
+      {% endif %}
+    </div>
+
+    <div class="col-md-4">
+      <div class="well well-lg">
+        <p>
+          Every time we deploy we run some stats on translations and throw them
+          in a JSON file. We keep history of those stats over time. This page
+          shows the state of translated strings across locales as of the last
+          deploy.
+        </p>
+        <p>
+          FIXME: This should get redone with d3 because ascii bar
+          charts are silly looking.
+        </p>
+        <p>
+          FIXME: Allow narrowing down to looking at specific "apps"
+          and "highlight" specific locales.
+        </p>
+        <p>
+          FIXME: Allow sorting by locale name (alphabetical) and by percentage
+          done.
+        </p>
+      </div>
+    </div>
+  </div>
+{% endblock innercontent %}

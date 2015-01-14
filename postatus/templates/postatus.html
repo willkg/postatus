@@ -1,46 +1,63 @@
-{% extends "base.html" %}
+{% extends "project.html" %}
 
-{% block content %}
-  <h1 id="project" data-name="{{ project.name }}" data-components="{{ l10n_components }}">Project: {{ project.name }}</h1>
-  <dl class="dl-horizontal">
-    <dt>url</dt>
-    <dd><a href="{{ project.url }}">{{ project.url }}</a></dd>
+{% block innercontent %}
+  <h2>Lint errors
+    <small>{{ postatus_datestamp }}</small>
+  </h2>
 
-    <dt>verbatim</dt>
-    <dd><a href="{{ project.verbatim_url }}">{{ project.verbatim_url }}</a></dd>
+  <div class="row">
+    <div class="col-md-8">
+      {% if errors %}
+        <h3>Errors</h3>
+        {% for error in errors %}
+          <p class="bg-danger">{{ error }}</p>
+        {% endfor %}
 
-    <dt>postatus url</dt>
-    <dd><a href="{{ project.postatus_url }}">{{ project.postatus_url }}</a></dd>
+      {% else %}
+        <h3>Results</h3>
 
-    <dt>postatus datestamp</dt>
-    <dd>{{ datestamp }}</dd>
-  </dl>
-
-  {% if errors %}
-    <h2>Errors</h2>
-    {% for error in errors %}
-      <p class="bg-danger">{{ error }}</p>
-    {% endfor %}
-
-  {% else %}
-
-    <h2>String errors</h2>
-    {% if serrors %}
-      {% for serror in serrors %}
-        <div class="locale" data-name="{{ serror.locale }}">
-          <h3>{{ serror.locale }} <small>{{ serror.fn }}</small></h3>
-          <pre>{{ serror.errors.decode('utf-8') }}</pre>
-          <div class="buglist">
+        {% if serrors %}
+          <div class="alert alert-dangersuccess">
+            There are errors!
           </div>
-          <p>
-            <a href="{{ generate_bug_url(project, serror.locale, serror.errors) }}">Generate bug</a>
-          </p>
-        </div>
-      {% endfor %}
-    {% else %}
-      <p>
-         No errors!
-      </p>
-    {% endif  %}
-  {% endif %}
-{% endblock content %}
+          {% for serror in serrors %}
+            <div class="locale" data-name="{{ serror.locale }}">
+              <h3>{{ serror.locale }} <small>{{ serror.fn }}</small></h3>
+              <pre>{{ serror.errors.decode('utf-8') }}</pre>
+              <div class="buglist">
+              </div>
+              <p>
+                <a href="{{ generate_bug_url(project, serror.locale, serror.errors) }}">Generate bug</a>
+              </p>
+            </div>
+          {% endfor %}
+        {% else %}
+          <div class="alert alert-success">
+            Good news! No errors!
+          </div>
+        {% endif %}
+      {% endif  %}
+    </div>
+
+    <div class="col-md-4">
+      <div class="well well-lg">
+        <p>
+          When {{ project.name }} is deployed, the deploy script pulls down
+          the new PO files, lints them and for PO files that have no errors,
+          it compiles them to MO files and those strings get updated.
+        </p>
+        <p>
+          For PO
+          files that do have errors, it does <b>not</b>
+          compile those PO files to MO files and strings do <b>not</b> get updated.
+        </p>
+        <p>
+          The PO linting errors are listed here as are possibly related
+          bugs that already exist and links to create bugs if there
+          aren't any.
+        </p>
+      </div>
+    </div>
+  </div>
+
+{% endblock innercontent %}

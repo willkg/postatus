@@ -14,6 +14,7 @@ PROJECTS = {
         'postatus_url': 'https://support.mozilla.org/media/postatus.txt',
         'verbatim_url': 'https://localize.mozilla.org/projects/sumo/',
         'verbatim_locale_url': 'https://localize.mozilla.org/%s/sumo/',
+        'l10n_completion_url': 'https://support.mozilla.org/media/uploads/l10n_history.json',
     },
     'Input': {
         'name': 'Input',
@@ -21,5 +22,6 @@ PROJECTS = {
         'postatus_url': 'https://input.mozilla.org/media/postatus.txt',
         'verbatim_url': 'https://localize.mozilla.org/projects/input/',
         'verbatim_locale_url': 'https://localize.mozilla.org/%s/input/',
+        'l10n_completion_url': 'https://input.mozilla.org/static/l10n_completion.json',
     },
 }

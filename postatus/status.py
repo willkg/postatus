@@ -84,13 +84,14 @@ class Status(object):
         for i, day in enumerate(data):
             if i == 0:
                 ret.append(('', day))
+                prev_day = day
                 continue
 
             if prev_day > day:
                 item = ('down', day)
             elif prev_day < day:
                 item = ('up', day)
-            elif day < 100:
+            else:
                 item = ('equal', day)
 
             prev_day = day
@@ -136,7 +137,6 @@ class Status(object):
                 get_data(day['locales'][loc]) for day in data))
             for loc in locales
         )
-        print output['locales']
 
         output['created'] = self.created
 

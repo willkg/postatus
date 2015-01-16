@@ -242,7 +242,11 @@ def view_l10n_summary(project):
         errors.append('Project has no l10n_completion_url configured.')
 
     else:
-        l10n_status = status.Status(projdata['l10n_completion_url'])
+        l10n_status = status.Status(
+            projdata['l10n_completion_url'],
+            app=request.args.get('app'),
+            highlight=request.args.get('highlight', '').split(',')
+        )
         l10n_status.get_data()
 
     return render_template(

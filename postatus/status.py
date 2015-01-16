@@ -44,7 +44,7 @@ class Status(object):
         last_item = self.data[-1]
 
         output = {}
-        output['app'] = self.app or 'All'
+        output['app'] = self.app or 'ALL'
 
         data = last_item['locales']
 
@@ -52,6 +52,10 @@ class Status(object):
             get_item = lambda x: x['apps'][self.app]
         else:
             get_item = lambda x: x
+
+        apps = data.items()[0][1]['apps'].keys()
+        apps.sort()
+        output['apps'] = apps
 
         items = [item for item in data.items() if item[0] not in highlight]
         hitems = [item for item in data.items() if item[0] in highlight]
@@ -89,7 +93,7 @@ class Status(object):
             percent = item.get('percent', -1)
             untranslated_words = item.get('untranslated_words', -1)
 
-            highlighted.append({
+            locales.append({
                 'locale': loc,
                 'percent': perc,
                 'total': total,

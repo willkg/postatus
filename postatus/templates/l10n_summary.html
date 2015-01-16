@@ -16,75 +16,82 @@
 
         {% if l10n_status %}
           {% set summary = l10n_status.summary() %}
-          <div>
-            {% if summary.highlighted %}
-              <h3>Highlighted locales</h3>
-              <table class="l10n-summary table table-condensed table-hover">
+          <h3>Apps</h3>
+          <p>
+            <a href="{{ url_for('view_l10n_summary', project=project.name, highlight=request.args.get('highlight')) }}">ALL</a>
+            {% for app in summary.apps %}
+              <a href="{{ url_for('view_l10n_summary', project=project.name, app=app, highlight=request.args.get('highlight')) }}">{{ app }}</a>
+            {% endfor %}
+            |
+            Showing data for app: <strong>{{ summary.app }}</strong>
+          </p>
+          {% if summary.highlighted %}
+            <h3>Highlighted locales</h3>
+            <table class="l10n-summary table table-condensed table-hover">
+              <tr>
+                <th>locale</th>
+                <th># untranslated words</th>
+                <th># untranslated strings</th>
+                <th>percent translated</th>
+              </tr>
+              {% for item in summary.highlighted %}
                 <tr>
-                  <th>locale</th>
-                  <th># untranslated words</th>
-                  <th># untranslated strings</th>
-                  <th>percent translated</th>
+                  <td>{{ item.locale }}</td>
+                  {% set bars = (item.percent / 5).__int__() %}
+                  <td>
+                    {{ item.untranslated_words }}
+                  </td>
+                  <td>
+                    {{ item.untranslated }}
+                  </td>
+                  <td>
+                    <span class="perc perc-{% if bars == 20 %}good{% elif bars > 15 %}ok{% else %}bad{% endif %}">
+                      {% for chunk in range(bars) %}
+                        <span class="perc-notch">=</span>
+                      {% endfor %}
+                    </span>
+                    <span class="perc-value">
+                      {{ item.percent }}
+                    </span>
+                  </td>
                 </tr>
-                {% for item in summary.highlighted %}
-                  <tr>
-                    <td>{{ item.locale }}</td>
-                    {% set bars = (item.percent / 5).__int__() %}
-                    <td>
-                      {{ item.untranslated_words }}
-                    </td>
-                    <td>
-                      {{ item.untranslated }}
-                    </td>
-                    <td>
-                      <span class="perc perc-{% if bars == 20 %}good{% elif bars > 15 %}ok{% else %}bad{% endif %}">
-                        {% for chunk in range(bars) %}
-                          <span class="perc-notch">=</span>
-                        {% endfor %}
-                      </span>
-                      <span class="perc-value">
-                        {{ item.percent }}
-                      </span>
-                    </td>
-                  </tr>
-                {% endfor %}
-              </table>
-            {% endif %}
+              {% endfor %}
+            </table>
+          {% endif %}
 
-            {% if summary.locales %}
-              <h3>Locales</h3>
-              <table class="l10n-summary table table-condensed table-hover">
+          {% if summary.locales %}
+            <h3>Locales</h3>
+            <table class="l10n-summary table table-condensed table-hover">
+              <tr>
+                <th>locale</th>
+                <th># untranslated words</th>
+                <th># untranslated strings</th>
+                <th>percent translated</th>
+              </tr>
+              {% for item in summary.locales %}
                 <tr>
-                  <th>locale</th>
-                  <th># untranslated words</th>
-                  <th># untranslated strings</th>
-                  <th>percent translated</th>
+                  <td>{{ item.locale }}</td>
+                  {% set bars = (item.percent / 5).__int__() %}
+                  <td>
+                    {{ item.untranslated_words }}
+                  </td>
+                  <td>
+                    {{ item.untranslated }}
+                  </td>
+                  <td>
+                    <span class="perc perc-{% if bars == 20 %}good{% elif bars > 15 %}ok{% else %}bad{% endif %}">
+                      {% for chunk in range(bars) %}
+                        <span class="perc-notch">=</span>
+                      {% endfor %}
+                    </span>
+                    <span class="perc-value">
+                      {{ item.percent }}
+                    </span>
+                  </td>
                 </tr>
-                {% for item in summary.locales %}
-                  <tr>
-                    <td>{{ item.locale }}</td>
-                    {% set bars = (item.percent / 5).__int__() %}
-                    <td>
-                      {{ item.untranslated_words }}
-                    </td>
-                    <td>
-                      {{ item.untranslated }}
-                    </td>
-                    <td>
-                      <span class="perc perc-{% if bars == 20 %}good{% elif bars > 15 %}ok{% else %}bad{% endif %}">
-                        {% for chunk in range(bars) %}
-                          <span class="perc-notch">=</span>
-                        {% endfor %}
-                      </span>
-                      <span class="perc-value">
-                        {{ item.percent }}
-                      </span>
-                    </td>
-                  </tr>
-                {% endfor %}
-              </table>
-            {% endif %}
-          </div>
+              {% endfor %}
+            </table>
+          {% endif %}
         {% endif %}
       {% endif %}
     </div>

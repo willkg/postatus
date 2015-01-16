@@ -34,19 +34,33 @@ table.l10n-summary td {
   padding-left: 10px;
 }
 
-.perc-good {
-  background: #4e4;
-  color: white;
+.perc {
+  border: 1px solid #E7E7E7;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  display: inline-block;
+  height: 14px;
+  padding: 2px;
+  position: relative;
+  width: 240px;
 }
 
-.perc-ok {
-  background: #ee4;
-  color: white;
+.perc > span {
+  display: block;
+  height: 8px;
 }
 
-.perc-bad {
-  background: #e44;
-  color: white;
+.perc-good > span {
+  background: #0c0;
+}
+
+.perc-ok > span {
+  background: #fc0;
+}
+
+.perc-bad > span {
+  background: #d00;
 }
 
 table.l10n-history {

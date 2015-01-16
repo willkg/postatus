@@ -49,9 +49,9 @@ class Status(object):
         data = last_item['locales']
 
         if self.app:
-            get_data = lambda x: x['apps'][self.app]['percent']
+            get_item = lambda x: x['apps'][self.app]
         else:
-            get_data = lambda x: x['percent']
+            get_item = lambda x: x
 
         items = [item for item in data.items() if item[0] not in highlight]
         hitems = [item for item in data.items() if item[0] in highlight]
@@ -61,16 +61,43 @@ class Status(object):
             for loc, loc_data in sorted(hitems, key=lambda x: -x[1]['percent']):
                 if loc in self.SKIP_LOCALES:
                     continue
-                perc = get_data(loc_data)
-                highlighted.append((loc, perc))
+                item = get_item(loc_data)
+                perc = item.get('percent', -1)
+                total = item.get('total', -1)
+                translated = item.get('translated', -1)
+                percent = item.get('percent', -1)
+                untranslated_words = item.get('untranslated_words', -1)
+
+                highlighted.append({
+                    'locale': loc,
+                    'percent': perc,
+                    'total': total,
+                    'translated': translated,
+                    'untranslated': total - translated,
+                    'untranslated_words': untranslated_words
+                })
         output['highlighted'] = highlighted
 
         locales = []
         for loc, loc_data in sorted(items, key=lambda x: -x[1]['percent']):
             if loc in self.SKIP_LOCALES:
                 continue
-            perc = get_data(loc_data)
-            locales.append((loc, perc))
+            item = get_item(loc_data)
+            perc = item.get('percent', -1)
+            total = item.get('total', -1)
+            translated = item.get('translated', -1)
+            percent = item.get('percent', -1)
+            untranslated_words = item.get('untranslated_words', -1)
+
+            highlighted.append({
+                'locale': loc,
+                'percent': perc,
+                'total': total,
+                'translated': translated,
+                'untranslated': total - translated,
+                'untranslated_words': untranslated_words
+            })
+
         output['locales'] = locales
 
         output['created'] = self.created
@@ -126,7 +153,7 @@ class Status(object):
         output['app'] = self.app or 'All'
 
         output['headers'] = [format_short_date(item['created']) for item in data]
-        
+
         output['highlighted'] = sorted(
             (loc, self._mark_movement(get_data(day['locales'][loc]) for day in data))
             for loc in hlocales

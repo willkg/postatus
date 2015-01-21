@@ -66,7 +66,6 @@ class Status(object):
                 if loc in self.SKIP_LOCALES:
                     continue
                 item = get_item(loc_data)
-                perc = item.get('percent', -1)
                 total = item.get('total', -1)
                 translated = item.get('translated', -1)
                 percent = item.get('percent', -1)
@@ -74,7 +73,7 @@ class Status(object):
 
                 highlighted.append({
                     'locale': loc,
-                    'percent': perc,
+                    'percent': percent,
                     'total': total,
                     'translated': translated,
                     'untranslated': total - translated,
@@ -87,7 +86,6 @@ class Status(object):
             if loc in self.SKIP_LOCALES:
                 continue
             item = get_item(loc_data)
-            perc = item.get('percent', -1)
             total = item.get('total', -1)
             translated = item.get('translated', -1)
             percent = item.get('percent', -1)
@@ -95,7 +93,7 @@ class Status(object):
 
             locales.append({
                 'locale': loc,
-                'percent': perc,
+                'percent': percent,
                 'total': total,
                 'translated': translated,
                 'untranslated': total - translated,

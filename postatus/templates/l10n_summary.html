@@ -44,11 +44,11 @@
                     {{ item.untranslated }}
                   </td>
                   <td>
-                    <span class="perc perc-{% if item.percent == 100 %}good{% elif item.percent > 75 %}ok{% else %}bad{% endif %}">
-                      <span style="width: {{ item.percent }}%"></span>
+                    <span class="perc perc-{% if item.percent >= 100 %}good{% elif item.percent > 75 %}ok{% else %}bad{% endif %}">
+                      <span style="width: {{ '%2.1f'|format(item.percent) }}%"></span>
                     </span>
                     <span class="perc-value">
-                      {{ item.percent }}
+                      {{ '%2.1f'|format(item.percent) }}%
                     </span>
                   </td>
                 </tr>
@@ -68,7 +68,6 @@
               {% for item in summary.locales %}
                 <tr>
                   <td>{{ item.locale }}</td>
-                  {% set bars = (item.percent / 5).__int__() %}
                   <td>
                     {{ item.untranslated_words }}
                   </td>
@@ -76,11 +75,11 @@
                     {{ item.untranslated }}
                   </td>
                   <td>
-                    <span class="perc perc-{% if item.percent == 100 %}good{% elif item.percent > 75 %}ok{% else %}bad{% endif %}">
-                      <span style="width: {{ item.percent }}%"></span>
+                    <span class="perc perc-{% if item.percent >= 100 %}good{% elif item.percent > 75 %}ok{% else %}bad{% endif %}">
+                      <span style="width: {{ '%2.1f'|format(item.percent) }}%"></span>
                     </span>
                     <span class="perc-value">
-                      {{ item.percent }}%
+                      {{ '%2.1f'|format(item.percent) }}%
                     </span>
                   </td>
                 </tr>

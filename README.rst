@@ -27,11 +27,16 @@ Install and configure
 
 1. Create a virtual environment.
 
-2. Install dependencies::
+2. Install dependencies for development::
+
+       $ pip install -r requirements-dev.txt
+
+   or for running it::
 
        $ pip install -r requirements.txt
 
-3. Read through ``config.py`` and change settings there.
+3. Read through ``postatus/settings.py`` and if you think you
+   need to change settings, open up a bug.
 
 
 Run server
@@ -45,4 +50,4 @@ Run::
 Deploy this
 ===========
 
-Use the ``wsgi.py`` file and a wsgi runner.
+Use the ``postatus/wsgi.py`` file and a wsgi runner.

@@ -4,12 +4,10 @@ import subprocess
 
 from flask.ext.script import Manager
 
-from wsgi import application
+from postatus.wsgi import app
 
 
-manager = Manager(application)
-
-app_path = os.path.join(os.path.dirname(__file__), 'denise')
+manager = Manager(app)
 
 
 def call_command(cmd, verbose=False):

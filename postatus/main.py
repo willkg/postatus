@@ -19,7 +19,8 @@ import requests
 from postatus import status
 
 app = Flask(__name__)
-app.config.from_object('config')
+from postatus import settings
+app.config.from_object(settings)
 
 
 # Special rule for old browsers to correctly handle favicon.

@@ -55,6 +55,9 @@
                       {{ '%2.1f'|format(item.percent) }}%
                     </span>
                   </td>
+                  <td>
+                    <a href="{{ generate_bug_url('untranslated', project, item.locale, '%s strings consisting of %s words' % (item.untranslated_words, item.untranslated)) }}">bug</a>
+                  </td>
                 </tr>
               {% endfor %}
             </table>

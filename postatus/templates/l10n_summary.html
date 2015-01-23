@@ -29,10 +29,14 @@
             <h3>Highlighted locales</h3>
             <table class="l10n-summary table table-condensed table-hover">
               <tr>
-                <th>locale</th>
-                <th># untranslated words</th>
-                <th># untranslated strings</th>
-                <th>percent translated</th>
+                <th rowspan=2>locale</th>
+                <th colspan=2>untranslated</th>
+                <th rowspan=2>percent translated</th>
+                <th rowspan=2>actions</th>
+              </tr>
+              <tr>
+                <th># words</th>
+                <th># strings</th>
               </tr>
               {% for item in summary.highlighted %}
                 <tr>
@@ -60,10 +64,14 @@
             <h3>Locales</h3>
             <table class="l10n-summary table table-condensed table-hover">
               <tr>
-                <th>locale</th>
-                <th># untranslated words</th>
-                <th># untranslated strings</th>
-                <th>percent translated</th>
+                <th rowspan=2>locale</th>
+                <th colspan=2>untranslated</th>
+                <th rowspan=2>percent translated</th>
+                <th rowspan=2>actions</th>
+              </tr>
+              <tr>
+                <th># words</th>
+                <th># strings</th>
               </tr>
               {% for item in summary.locales %}
                 <tr>
@@ -81,6 +89,9 @@
                     <span class="perc-value">
                       {{ '%2.1f'|format(item.percent) }}%
                     </span>
+                  </td>
+                  <td>
+                    <a href="{{ generate_bug_url('untranslated', project, item.locale, '%s strings consisting of %s words' % (item.untranslated_words, item.untranslated)) }}">bug</a>
                   </td>
                 </tr>
               {% endfor %}

@@ -1,0 +1,9 @@
+We found errors in the translated strings for {{ product }} <{{ url }}>. The errors are as follows:
+
+{{ text }}
+
+{{ product }} strings can be fixed in the {{ product }} project in Verbatim <{{ verbatim_locale_url }}>.
+
+Once that is fixed we can pick up all recent changes in {{ locale }}. Thanks a lot for your work on {{ product }}!
+
+If you have any questions, please let us know.

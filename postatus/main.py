@@ -141,7 +141,10 @@ def get_l10n_components():
 
 
 def get_component_for_locale(locale):
-    return get_l10n_components()[locale.replace('_', '-')]
+    try:
+        return get_l10n_components()[locale.replace('_', '-')]
+    except KeyError:
+        return None
 
 
 SUMMARY = "[%(locale)s] %(product)s: errors in strings: %(date)s"
@@ -163,30 +166,32 @@ If you have any questions, please let us know.
 """
 
 
-def generate_bug_url(project, locale, errortext):
-    if len(errortext) > 2000:
-        errortext = 'TOO MANY ERRORS: PLEASE COPY AND PASTE ERRORS HERE'
+def generate_bug_url(template, project, locale, text):
+    if len(text) > 2000:
+        text = 'TOO MUCH TEXT: PLEASE COPY AND PASTE TEXT HERE'
 
     context = {
         'url': project['url'],
         'product': project['name'],
         'verbatim_locale_url': project['verbatim_locale_url'] % locale,
         'locale': locale,
-        'errors': errortext,
+        'text': text,
         'date': datetime.datetime.now().strftime('%Y-%m-%d'),
     }
 
-    data = {
+    url_data = {
         'product': 'Mozilla Localizations',
-        'component': get_component_for_locale(locale),
         'format': '__standard__',
-        'short_desc': SUMMARY % context,
-        'comment': DESC % context,
+        'short_desc': render_template('bug/' + template + '_summary.txt', **context),
+        'comment': render_template('bug/' + template + '_description.txt', **context),
         'rep_platform': 'all',
         'op_sys': 'all'
     }
+    comp = get_component_for_locale(locale)
+    if comp:
+        url_data['component'] = get_component_for_locale(locale).encode('utf-8')
 
-    return 'https://bugzilla.mozilla.org/enter_bug.cgi?' + urlencode(data)
+    return 'https://bugzilla.mozilla.org/enter_bug.cgi?' + urlencode(url_data)
 
 
 @app.route('/p/<project>')
@@ -255,6 +260,7 @@ def view_l10n_summary(project):
         created=l10n_status.created,
         project=projdata,
         errors=errors,
+        generate_bug_url=generate_bug_url,
         l10n_status=l10n_status
     )
 

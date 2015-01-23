@@ -1,0 +1,9 @@
+There are strings that need to be translated for {{ product }} <{{ url }}>.
+
+{{ text }}
+
+{{ product }} strings can be translated in the {{ product }} project in Verbatim <{{ verbatim_locale_url }}>.
+
+Once those are translated, we can pick up all the recent changes in {{ locale }}. Thank you for your work on {{ product }}! Your work helps thousands of people help us understand how we can fix Mozilla products to make them better for everyone.
+
+If you have any questions, please let us know.

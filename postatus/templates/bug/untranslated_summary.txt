@@ -1,0 +1,1 @@
+[{{ locale }}] {{ product }}: untranslated strings: {{ date }}

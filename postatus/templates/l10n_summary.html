@@ -56,7 +56,7 @@
                     </span>
                   </td>
                   <td>
-                    <a href="{{ generate_bug_url('untranslated', project, item.locale, '%s strings consisting of %s words' % (item.untranslated_words, item.untranslated)) }}">bug</a>
+                    <a href="{{ generate_bug_url('untranslated', project, item.locale, '%s strings consisting of %s words' % (item.untranslated, item.untranslated_words)) }}">bug</a>
                   </td>
                 </tr>
               {% endfor %}
@@ -94,7 +94,7 @@
                     </span>
                   </td>
                   <td>
-                    <a href="{{ generate_bug_url('untranslated', project, item.locale, '%s strings consisting of %s words' % (item.untranslated_words, item.untranslated)) }}">bug</a>
+                    <a href="{{ generate_bug_url('untranslated', project, item.locale, '%s strings consisting of %s words' % (item.untranslated, item.untranslated_words)) }}">bug</a>
                   </td>
                 </tr>
               {% endfor %}

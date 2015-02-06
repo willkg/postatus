@@ -33,7 +33,7 @@
                   <tr>
                     <th>{{ loc_item[0] }}</th>
                     {% for data_point in loc_item[1] %}
-                      <td class="history-{{ data_point[0] }}">{{ data_point[1] }}</td>
+                      <td class="history-{{ data_point[0] }}">{{ '%2.1f'|format(data_point[1]) }}</td>
                     {% endfor %}
                   <tr>
                 {% endfor %}

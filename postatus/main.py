@@ -176,15 +176,15 @@ def generate_bug_url(template, project, locale, text):
         'product': project['name'],
         'verbatim_locale_url': project['verbatim_locale_url'] % locale,
         'locale': locale,
-        'text': text,
+        'text': text.decode('utf-8'),
         'date': datetime.datetime.now().strftime('%Y-%m-%d'),
     }
 
     url_data = {
         'product': 'Mozilla Localizations',
         'format': '__standard__',
-        'short_desc': render_template('bug/' + template + '_summary.txt', **context),
-        'comment': render_template('bug/' + template + '_description.txt', **context),
+        'short_desc': render_template('bug/' + template + '_summary.txt', **context).encode('utf-8'),
+        'comment': render_template('bug/' + template + '_description.txt', **context).encode('utf-8'),
         'rep_platform': 'all',
         'op_sys': 'all'
     }

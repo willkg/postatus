@@ -1,1 +1,1 @@
-[{{ locale }}] {{ product }}: error in strings: {{ date }}
+[{{ locale }}] {{ product }}: errors in strings: {{ date }}

@@ -138,6 +138,11 @@ def get_l10n_components():
         L10N_COMPONENTS_CACHE = dict(
             [(comp.split(' ')[0], comp) for comp in comps]
         )
+
+        # Account for locales we have in Fjord and Kitsune that match to
+        # different names in Bugzilla.
+        L10N_COMPONENTS_CACHE['es'] = L10N_COMPONENTS_CACHE['es-ES']
+
     return L10N_COMPONENTS_CACHE
 
 
@@ -146,25 +151,6 @@ def get_component_for_locale(locale):
         return get_l10n_components()[locale.replace('_', '-')]
     except KeyError:
         return None
-
-
-SUMMARY = "[%(locale)s] %(product)s: errors in strings: %(date)s"
-DESC = """\
-We found errors in the translated strings for %(product)s
-<%(url)s>. The errors are as follows:
-
-
-%(errors)s
-
-
-%(product)s strings can be fixed in the %(product)s project in Verbatim
-<%(verbatim_locale_url)s>.
-
-Once that is fixed we can pick up all recent changes in %(locale)s. Thanks
-a lot for your work on %(product)s!
-
-If you have any questions, please let us know.
-"""
 
 
 def generate_bug_url(template, project, locale, text):

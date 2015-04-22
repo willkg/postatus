@@ -51,6 +51,11 @@
         // Get the bugs for this locale with the specified summary
         // that changed in the last 28 days. This will pick up new
         // bugs as well as bugs recently resolved.
+        //
+        // Mike pointed out that we might be better off pulling
+        // all the bugs and not limiting by time frame and then
+        // showing the top n of them. We can look into that later
+        // if 28 doesn't work well enough.
         var params = {
             product: 'Mozilla Localizations',
             component: component,

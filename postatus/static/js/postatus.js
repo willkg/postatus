@@ -49,7 +49,7 @@
         var node = $(value).find('.buglist');
 
         // Get the bugs for this locale with the specified summary
-        // that changed in the last 14 days. This will pick up new
+        // that changed in the last 28 days. This will pick up new
         // bugs as well as bugs recently resolved.
         var params = {
             product: 'Mozilla Localizations',
@@ -58,7 +58,7 @@
             short_desc: project + ': errors in strings',
             f1: 'days_elapsed',
             o1: 'lessthaneq',
-            v1: '14',
+            v1: '28',
             query_format: 'advanced'
         };
 

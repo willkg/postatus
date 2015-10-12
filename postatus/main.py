@@ -59,9 +59,10 @@ def catchy_thing():
         'is sweeter than honey!',
         'makes my mouth water!',
         'is the cat\'s pajamas!',
-        'is a very mysterious and powerful site and it\'s mystery is only '
-        'exceeded by it\'s power.',
+        ('is a very mysterious and powerful site and it\'s mystery is only '
+         'exceeded by it\'s power.'),
         'is a banana stand.',
+        'can do the kessel run in 11 parsecs.',
     ]))
 
 

@@ -149,8 +149,7 @@ class Status(object):
         )
 
         output['locales'] = sorted(
-            (loc, self._mark_movement(
-                get_data(day['locales'][loc]) for day in data))
+            (loc, self._mark_movement(get_data(day['locales'].get(loc, {'percent': 0.0})) for day in data))
             for loc in locales
         )
 

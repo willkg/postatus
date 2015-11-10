@@ -26,7 +26,8 @@
                 <tr>
                   <th>&nbsp;</th>
                   {% for date in history.headers %}
-                    <th>{{ date }}</th>
+                    {# date is YYYY-mm-dd, so we remove 5 to show just mm-dd #}
+                    <th>{{ date[5:] }}</th>
                   {% endfor %}
                 </tr>
                 {% for loc_item in history.locales %}

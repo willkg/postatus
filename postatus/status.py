@@ -1,17 +1,4 @@
 import requests
-import sys
-import time
-
-
-def format_time(t):
-    return time.ctime(t)
-
-
-def format_short_date(t):
-    return time.strftime('%m/%d', time.gmtime(t))
-
-
-# ./bin/l10n_status.py --app=feedback --type=history --highlight=es,pt_BR,po,hu,de,gr,fr,it,ru,ja,tr,zh_TW,zh_CN https://input.mozilla.org/static/l10n_completion.json
 
 
 class Status(object):
@@ -34,7 +21,7 @@ class Status(object):
             resp.raise_for_status()
 
         self.data = resp.json()
-        self.created = format_time(self.data[-1]['created'])
+        self.created = self.data[-1]['created']
 
     def summary(self):
         """Generates summary data of today's state"""
@@ -154,7 +141,7 @@ class Status(object):
         output = {}
         output['app'] = self.app or 'All'
 
-        output['headers'] = [format_short_date(item['created']) for item in data]
+        output['headers'] = [item['created'] for item in data]
 
         output['highlighted'] = sorted(
             (loc, self._mark_movement(get_data(day['locales'][loc]) for day in data))

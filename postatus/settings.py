@@ -14,7 +14,8 @@ PROJECTS = {
         'postatus_url': 'https://support.mozilla.org/media/postatus.txt',
         'verbatim_url': 'https://localize.mozilla.org/projects/sumo/',
         'verbatim_locale_url': 'https://localize.mozilla.org/%s/sumo/',
-        'l10n_completion_url': 'https://support.mozilla.org/media/uploads/l10n_history.json',
+        'l10n_completion_url': 'https://people.mozilla.org/~wkahngreene/l10n/kitsune_completion.json',
+        # 'l10n_completion_url': 'https://support.mozilla.org/media/uploads/l10n_history.json',
     },
     'Input': {
         'name': 'Input',

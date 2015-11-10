@@ -22,6 +22,6 @@ PROJECTS = {
         'postatus_url': 'https://input.mozilla.org/media/postatus.txt',
         'verbatim_url': 'https://localize.mozilla.org/projects/input/',
         'verbatim_locale_url': 'https://localize.mozilla.org/%s/input/',
-        'l10n_completion_url': 'https://input.mozilla.org/static/l10n_completion.json',
+        'l10n_completion_url': 'https://people.mozilla.org/~wkahngreene/l10n/fjord_completion.json',
     },
 }
